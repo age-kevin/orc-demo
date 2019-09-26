@@ -16,17 +16,20 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 @Service
-public class ExecuteTest {
+public class ExecuteService {
 
     @Autowired
     AuthService authService;
+
+    @Autowired
+    ExportService exportService;
 
     String POST_URL = "https://aip.baidubce.com/rest/2.0/ocr/v1/accurate_basic?access_token=" + authService.getAuth();
 
     /**
      * 识别本地图片的文字
      */
-    public String checkFile(String path) throws URISyntaxException, IOException {
+    public List<words_result> checkFile(String path) throws URISyntaxException, IOException {
         File file = new File(path);
         if (!file.exists()) {
             throw new NullPointerException("图片不存在");
@@ -40,7 +43,7 @@ public class ExecuteTest {
      * 图片url
      * 识别结果，为json格式
      */
-    public String checkUrl(String url) throws IOException, URISyntaxException {
+    public List<words_result> checkUrl(String url) throws IOException, URISyntaxException {
         String param = "url=" + url;
         return post(param);
     }
@@ -48,7 +51,7 @@ public class ExecuteTest {
     /**
      * 通过传递参数：url和image进行文字识别
      */
-    private String post(String param) {
+    private List<words_result> post(String param) {
         //开始搭建post请求
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
@@ -60,12 +63,15 @@ public class ExecuteTest {
         SourceData sourceData = json.toJavaObject(SourceData.class);
         List<words_result> wordsResults = sourceData.getWords_result();
         int size = wordsResults.size();
-        for (int i = 0; i < size; i++){
-            if (i % 3 == 0){
-                System.out.print("\n");
-            }
-            System.out.print(wordsResults.get(i).getWords() + "        ");
+        int count = 0;
+        for (int i = 0; i < size; i += 3){
+            wordsResults.get(count).setUserName(wordsResults.get(i).getWords());
+            wordsResults.get(count).setNumber(wordsResults.get(i + 1).getWords());
+            wordsResults.get(count).setProfit(wordsResults.get(i + 2).getWords());
+            System.out.println(wordsResults.get(count).getUserName() + " " + wordsResults.get(count).getNumber() + " " + wordsResults.get(count).getProfit());
+            count++;
         }
-        return strbody.getBody();
+
+        return wordsResults;
     }
 }
