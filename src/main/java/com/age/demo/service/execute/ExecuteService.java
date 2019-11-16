@@ -69,6 +69,7 @@ public class ExecuteService {
             wordsResults.get(count).setNumber(wordsResults.get(i + 1).getWords());
             wordsResults.get(count).setProfit(wordsResults.get(i + 2).getWords());
             System.out.println(wordsResults.get(count).getUserName() + " " + wordsResults.get(count).getNumber() + " " + wordsResults.get(count).getProfit());
+            System.out.println();
             count++;
         }
 

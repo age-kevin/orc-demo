@@ -16,7 +16,7 @@ import java.util.List;
 @Service
 public class ExportService {
     //创建临时文件存放的路径
-    private String temp="G:\\temp\\excel\\";
+    private String temp="D:\\temp\\excel\\";
 
     public String export(List<words_result> wordsResults){
         //创建工作簿

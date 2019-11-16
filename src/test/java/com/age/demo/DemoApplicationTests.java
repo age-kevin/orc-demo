@@ -23,7 +23,7 @@ public class DemoApplicationTests {
 
     @Test
     public void test01() throws IOException, URISyntaxException {
-        executeService.checkFile("D:/TestWorkspace/orc-demo/20190926091857.png");
+        executeService.checkFile("C:/Users/Administrator/Desktop/photo/20190925220630white.png");
     }
 
 }
