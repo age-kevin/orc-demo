@@ -1,4 +1,4 @@
-package com.age.demo.controller;
+package com.age.demo.controller.images;
 
 import com.age.demo.bean.words_result;
 import com.age.demo.service.execute.ExecuteService;
@@ -28,7 +28,7 @@ public class UploadPhotoEndpoint {
     @Value("${file.upload.path}")
     private String filePath;
 
-    @RequestMapping(value = "/age/image/UploadPhoto")
+    @RequestMapping(value = "/age/images/UploadPhoto")
     public void uploadPhoto(@RequestParam("file") MultipartFile file, HttpServletResponse response) throws IOException, URISyntaxException {
         // 获取上传文件名
         String filename = file.getOriginalFilename();

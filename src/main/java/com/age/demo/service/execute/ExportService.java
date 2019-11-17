@@ -40,7 +40,7 @@ public class ExportService {
             XSSFCell cell = row.createCell(0);
             cell.setCellValue(wordsResult.getUserName());
             cell = row.createCell(1);
-            cell.setCellValue(wordsResult.getNumber());
+            cell.setCellValue(wordsResult.getUserNumber());
             cell = row.createCell(2);
             cell.setCellValue(wordsResult.getProfit());
         }

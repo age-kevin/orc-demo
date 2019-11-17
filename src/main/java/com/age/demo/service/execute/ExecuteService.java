@@ -2,6 +2,7 @@ package com.age.demo.service.execute;
 
 import com.age.demo.bean.SourceData;
 import com.age.demo.bean.words_result;
+import com.age.demo.mapper.DataMapper;
 import com.age.demo.service.auth.AuthService;
 import com.age.demo.service.auth.BaseImg64;
 import com.alibaba.fastjson.JSONObject;
@@ -13,6 +14,7 @@ import org.springframework.web.client.RestTemplate;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -23,6 +25,9 @@ public class ExecuteService {
 
     @Autowired
     ExportService exportService;
+
+    @Autowired
+    DataMapper dataMapper;
 
     String POST_URL = "https://aip.baidubce.com/rest/2.0/ocr/v1/accurate_basic?access_token=" + authService.getAuth();
 
@@ -62,17 +67,21 @@ public class ExecuteService {
         JSONObject json = JSONObject.parseObject(strbody.getBody());
         SourceData sourceData = json.toJavaObject(SourceData.class);
         List<words_result> wordsResults = sourceData.getWords_result();
+        List<words_result> results = new ArrayList<>();
         int size = wordsResults.size();
-        int count = 0;
         for (int i = 0; i < size; i += 3){
-            wordsResults.get(count).setUserName(wordsResults.get(i).getWords());
-            wordsResults.get(count).setNumber(wordsResults.get(i + 1).getWords());
-            wordsResults.get(count).setProfit(wordsResults.get(i + 2).getWords());
-            System.out.println(wordsResults.get(count).getUserName() + " " + wordsResults.get(count).getNumber() + " " + wordsResults.get(count).getProfit());
-            System.out.println();
-            count++;
+            words_result wordsResult = new words_result();
+            wordsResult.setUserName(wordsResults.get(i).getWords());
+            wordsResult.setUserNumber(wordsResults.get(i + 1).getWords());
+            String profit = wordsResults.get(i + 2).getWords();
+            if (profit.contains(">")) {
+                profit = profit.substring(0, profit.length()-1);
+            }
+            wordsResult.setProfit(profit);
+            results.add(wordsResult);
         }
+        dataMapper.insertData(results);
 
-        return wordsResults;
+        return results;
     }
 }
