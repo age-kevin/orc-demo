@@ -13,7 +13,16 @@ public class RegisterService {
     RegisterMapper registerMapper;
 
     public ResponseBean run(RegisterParameter param){
-        registerMapper.insertUser(param);
-        return ResponseBean.actionSuccess("", "");
+        if (param != null) {
+            int count = registerMapper.checkUserName(param);
+            if (count > 0) {
+                return ResponseBean.actionSuccess("1", "用户名已存在！");
+            } else {
+                registerMapper.insertUser(param);
+                return ResponseBean.actionSuccess("0", "注册成功！");
+            }
+        } else {
+            return ResponseBean.actionSuccess("1", "未接受到参数！");
+        }
     }
 }

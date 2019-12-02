@@ -15,7 +15,7 @@ public class RegisterController {
 
     @GetMapping("/v1.0")
     @CrossOrigin(origins = "*")
-    public ResponseBean userRegister(@RequestBody RegisterParameter param){
+    public ResponseBean userRegister(RegisterParameter param){
         return registerService.run(param);
     }
 }
