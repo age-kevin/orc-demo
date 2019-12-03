@@ -1,7 +1,7 @@
 package com.age.demo.mapper.login;
 
-import com.age.demo.parameter.RegisterParameter;
+import com.age.demo.bean.User;
 
 public interface LoginMapper {
-    Integer checkUserNameAndPassword(RegisterParameter param);
+    Integer checkUserNameAndPassword(User user);
 }
