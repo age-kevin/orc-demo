@@ -3,14 +3,14 @@
 <mapper namespace="com.age.demo.mapper.login.UserMapper">
 
     <select id="findByUsername" resultType="com.age.demo.bean.User">
-      SELECT id_user,password
+      SELECT id_user as idUser,password
       FROM user
       WHERE
       user_name = #{userName}
     </select>
 
     <select id="findUserById" resultType="com.age.demo.bean.User">
-        SELECT user_name,password
+        SELECT user_name as userName,password
         FROM user
         WHERE
         id_user = #{idUser}

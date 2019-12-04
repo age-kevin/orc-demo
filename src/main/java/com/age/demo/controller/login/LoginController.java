@@ -9,6 +9,7 @@ import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,7 +18,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
-@RequestMapping(value = "/age/login/UserLogin")
+@RequestMapping(value = "/age")
 public class LoginController {
     private static Logger LOG = LoggerFactory.getLogger(LoginController.class);
 
@@ -27,7 +28,7 @@ public class LoginController {
     TokenService tokenService;
 
     // 登录
-    @RequestMapping(value = "/login" ,method = RequestMethod.GET)
+    @GetMapping("/login")
     public Object login(User user, HttpServletResponse response) {
         JSONObject jsonObject = new JSONObject();
         User userForBase = new User();
@@ -57,7 +58,7 @@ public class LoginController {
      * @return String 返回类型
      */
     @UserLoginToken
-    @RequestMapping(value = "/getMessage" ,method = RequestMethod.GET)
+    @GetMapping("/getMessage")
     public String getMessage() {
 
         // 取出token中带的用户id 进行操作

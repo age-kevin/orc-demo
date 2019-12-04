@@ -1,5 +1,6 @@
 package com.age.demo.controller.query;
 
+import com.age.demo.annotation.UserLoginToken;
 import com.age.demo.bean.ResponseBean;
 import com.age.demo.service.query.QueryDataDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ public class QueryDataDetailEndpoint {
     QueryDataDetailService queryDataDetailService;
 
     @GetMapping("/v1.0")
+    @UserLoginToken
     @CrossOrigin(origins = "*")
     public ResponseBean queryDataDetail(){
         return queryDataDetailService.run();
