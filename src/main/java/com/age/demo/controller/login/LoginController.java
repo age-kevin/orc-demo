@@ -1,6 +1,7 @@
 package com.age.demo.controller.login;
 
 import com.age.demo.annotation.UserLoginToken;
+import com.age.demo.bean.ResponseBean;
 import com.age.demo.bean.User;
 import com.age.demo.service.Login.UserService;
 import com.age.demo.service.token.TokenService;
@@ -9,9 +10,9 @@ import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.Cookie;
@@ -29,25 +30,25 @@ public class LoginController {
 
     // 登录
     @GetMapping("/login")
-    public Object login(User user, HttpServletResponse response) {
+    @CrossOrigin(origins = "*")
+    public ResponseBean login(User user, HttpServletResponse response) {
         JSONObject jsonObject = new JSONObject();
-        User userForBase = new User();
-        userForBase.setIdUser(userService.findByUsername(user).getIdUser());
-        userForBase.setUserName(userService.findByUsername(user).getUserName());
-        userForBase.setPassword(userService.findByUsername(user).getPassword());
-        if (!userForBase.getPassword().equals(user.getPassword())) {
-            jsonObject.put("message", "登录失败,密码错误");
-            return jsonObject;
+        User userForBase = userService.findByUsername(user);
+        if (userForBase != null) {
+            if (!userForBase.getPassword().equals(user.getPassword())) {
+                return ResponseBean.actionFail("登录失败,密码错误");
+            } else {
+                String token = tokenService.getToken(userForBase);
+                jsonObject.put("token", token);
+
+                Cookie cookie = new Cookie("token", token);
+                cookie.setPath("/");
+                response.addCookie(cookie);
+
+                return ResponseBean.actionSuccess(jsonObject, "登录成功");
+            }
         } else {
-            String token = tokenService.getToken(userForBase);
-            jsonObject.put("token", token);
-
-            Cookie cookie = new Cookie("token", token);
-            cookie.setPath("/");
-            response.addCookie(cookie);
-
-            return jsonObject;
-
+            return ResponseBean.actionFail("该用户不存在");
         }
     }
     /***
